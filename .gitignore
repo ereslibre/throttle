@@ -1,0 +1,8 @@
+*~
+*.gem
+*.pyc
+throttle/passenger-prod/public
+throttle/passenger-dev/public
+.directory
+.kdev4
+throttle.kdev4

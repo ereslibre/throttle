@@ -1,0 +1,11 @@
+- sinatra
+  sudo gem install sinatra
+
+- mongodb ruby driver
+  sudo gem install json bson bson_ext mongo
+
+- passenger
+  sudo gem install passenger
+
+- bzip2-ruby
+  sudo gem install bzip2-ruby

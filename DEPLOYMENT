@@ -1,0 +1,76 @@
+Phusion Passenger
+=================
+
+Before setting up the server itself you need to run some commands:
+
+1. `rake source` if you are going to use dev.throttle.localhost
+2. `rake build` if you are going to use prod.throttle.localhost
+3. `rake certificate` to get a self-signed certificate generated on /etc folder
+      Note: this last step requires interaction
+
+Now make sure Passenger is correctly installed and set up in your server.
+
+It is needed to set up HTTPS in order to use the web client, since it stores
+secure cookies to maintain sessions. With the previous command `rake certificate`
+that we did run before, our certificate file and key has been generated at
+/etc/server.crt and /etc/server.key respectively.
+
+Following a configuration example for both Apache and nginx servers:
+
+  Apache
+  ------
+
+    NameVirtualHost *:443
+
+    <VirtualHost *:443>
+      ServerName prod.throttle.localhost
+      DocumentRoot /path/to/throttle/throttle/passenger-prod/public/
+      SSLEngine on
+      SSLCertificateFile /etc/server.crt
+      SSLCertificateKeyFile /etc/server.key
+      <Directory /path/to/throttle/throttle/passenger-prod/public/>
+        AllowOverride all
+        Options -MultiViews
+      </Directory>
+    </VirtualHost>
+
+    <VirtualHost *:443>
+      ServerName dev.throttle.localhost
+      DocumentRoot /path/to/throttle/throttle/passenger-dev/public/
+      SSLEngine on
+      SSLCertificateFile /etc/server.crt
+      SSLCertificateKeyFile /etc/server.key
+      <Directory /path/to/throttle/throttle/passenger-dev/public/>
+        AllowOverride all
+        Options -MultiViews
+      </Directory>
+    </VirtualHost>
+
+
+  nginx
+  -----
+
+    http {
+        passenger_root /usr/lib/ruby/gems/1.9.1/gems/passenger-2.2.15;
+        passenger_ruby /usr/bin/ruby;
+
+        server {
+            listen 443;
+            ssl on;
+            ssl_certificate /etc/server.crt;
+            ssl_certificate_key /etc/server.key;
+            server_name prod.throttle.localhost;
+            passenger_enabled on;
+            root /path/to/throttle/throttle/passenger-prod/public;
+        }
+
+        server {
+            listen 443;
+            ssl on;
+            ssl_certificate /etc/server.crt;
+            ssl_certificate_key /etc/server.key;
+            server_name dev.throttle.localhost;
+            passenger_enabled on;
+            root /path/to/throttle/throttle/passenger-dev/public;
+        }
+    }
