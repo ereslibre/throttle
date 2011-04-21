@@ -31,6 +31,10 @@ module Throttle
       Success.new(:result => (1..10).to_a).to_json
     end
 
+    Action.post("/users") do
+      Success.new(:result => request.body.read).to_json
+    end
+
   end
 
 end
