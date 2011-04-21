@@ -15,7 +15,7 @@ task :build do
   system "gem build throttle.gemspec"
 end
 
-task :install do
+task :install => [:build] do
   system "gem install throttle-#{Throttle::VERSION}.gem"
 end
 
